@@ -1,3 +1,3 @@
 extends Node2D
 
-var Player
+var Player = null

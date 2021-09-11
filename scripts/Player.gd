@@ -1,5 +1,6 @@
 extends KinematicBody2D
 
+export var health = 3
 export var speed = 300
 export var bullet_speed = 1000
 export var fire_rate = 0.2
@@ -11,6 +12,9 @@ var bullet = preload("res://scenes/Bullet.tscn")
 
 func _ready():
 	Global.Player = self
+
+func _exit_tree():
+	Global.Player = null
 
 func _physics_process(delta):
 	movement = Vector2()
@@ -45,3 +49,10 @@ func _physics_process(delta):
 
 func player_die():
 	get_tree().reload_current_scene()
+
+func _on_Area2D_body_entered(body):
+	if body.is_in_group("zombie"):
+		health -= 1
+		get_parent().find_node("UI").find_node("HealthSprite").frame -= 1
+		if health <= 0:
+			player_die()
